@@ -492,6 +492,37 @@ find_output_by_display (GsdWacomDevice *device)
 	return find_output_by_edid (edid[0], edid[1], edid[2]);
 }
 
+static GnomeRROutputInfo*
+find_output_by_monitor (GdkScreen *screen, gint monitor)
+{
+	GError *error = NULL;
+	GnomeRRScreen *rr_screen;
+	GnomeRRConfig *rr_config;
+	GnomeRROutputInfo **rr_output_info;
+
+	if (monitor >= 0)
+	{
+		/* TODO: Check the value of 'error' */
+		rr_screen = gnome_rr_screen_new (screen, &error);
+		rr_config = gnome_rr_config_new_current (rr_screen, &error);
+		rr_output_info = gnome_rr_config_get_outputs (rr_config);
+
+		for (; *rr_output_info != NULL; rr_output_info++) {
+			int x, y, w, h;
+
+			if (!gnome_rr_output_info_is_active (*rr_output_info))
+				continue;
+
+			gnome_rr_output_info_get_geometry (*rr_output_info, &x, &y, &w, &h);
+			if (monitor == gdk_screen_get_monitor_at_point (screen, x, y))
+				return *rr_output_info;
+		}
+	}
+
+	g_warning ("No output found for monitor %d.", monitor);
+	return NULL;
+}
+
 static void
 set_display_by_output (GsdWacomDevice    *device,
                        GnomeRROutputInfo *rr_output_info)
@@ -534,6 +565,17 @@ set_display_by_output (GsdWacomDevice    *device,
 	g_free (o_vendor);
 	g_free (o_product);
 	g_free (o_serial);
+}
+
+
+void
+gsd_wacom_device_set_display (GsdWacomDevice *device,
+                              gint            monitor)
+{
+	GnomeRROutputInfo *output;
+
+	output = find_output_by_monitor (gdk_screen_get_default (), monitor);
+	set_display_by_output (device, output);
 }
 
 static GnomeRROutputInfo*
