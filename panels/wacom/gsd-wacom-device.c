@@ -472,6 +472,9 @@ find_output_by_display (GsdWacomDevice *device)
 	GVariant *display;
 	const gchar **edid;
 
+	if (device == NULL)
+		return NULL;
+
 	tablet   = device->priv->wacom_settings;
 	display  = g_settings_get_value (tablet, "display");
 	edid     = g_variant_get_strv (display, &n);
@@ -508,10 +511,19 @@ set_display_by_output (GsdWacomDevice    *device,
 		return;
 	}
 
-	o_vendor = g_malloc0 (4);
-	gnome_rr_output_info_get_vendor (rr_output_info, o_vendor);
-	o_product = g_strdup_printf ("%d", gnome_rr_output_info_get_product (rr_output_info));
-	o_serial  = g_strdup_printf ("%d", gnome_rr_output_info_get_serial  (rr_output_info));
+	if (rr_output_info == NULL)
+	{
+		o_vendor  = g_strdup("");
+		o_product = g_strdup("");
+		o_serial  = g_strdup("");
+	}
+	else
+	{
+		o_vendor = g_malloc0 (4);
+		gnome_rr_output_info_get_vendor (rr_output_info, o_vendor);
+		o_product = g_strdup_printf ("%d", gnome_rr_output_info_get_product (rr_output_info));
+		o_serial  = g_strdup_printf ("%d", gnome_rr_output_info_get_serial  (rr_output_info));
+	}
 
 	values[0] = o_vendor;
 	values[1] = o_product;
