@@ -25,6 +25,7 @@
 #include "cc-wacom-page.h"
 #include "cc-wacom-nav-button.h"
 #include "cc-wacom-stylus-page.h"
+#include "cc-wacom-mapping-panel.h"
 #include "gui_gtk.h"
 #include <gtk/gtk.h>
 
@@ -48,6 +49,7 @@ struct _CcWacomPagePrivate
 	GtkWidget      *notebook;
 	CalibArea      *area;
 	GSettings      *wacom_settings;
+	GtkWidget      *mapper;
 	/* The UI doesn't support cursor/pad at the moment */
 };
 
@@ -356,6 +358,13 @@ cc_wacom_page_init (CcWacomPage *self)
 	gtk_container_add (GTK_CONTAINER (self), box);
 	gtk_widget_set_vexpand (GTK_WIDGET (box), TRUE);
 
+	/* TODO: When finished, the output mapping panel should be an independent
+	 * dialog; not crammed in with the rest of the tablet UI.*/
+	priv->mapper = cc_wacom_mapping_panel_new ();
+	gtk_grid_insert_row (GTK_GRID (box), 2);
+	gtk_grid_attach_next_to (GTK_GRID (box), priv->mapper, WID ("combo-tabletmode"), GTK_POS_BOTTOM, 1, 1);
+	gtk_widget_set_hexpand (priv->mapper, TRUE);
+
 	self->priv->notebook = WID ("stylus-notebook");
 
 	g_signal_connect (WID ("button-calibrate"), "clicked",
@@ -448,6 +457,7 @@ cc_wacom_page_new (GsdWacomDevice *stylus,
 	priv = page->priv;
 	priv->stylus = stylus;
 	priv->eraser = eraser;
+	cc_wacom_mapping_panel_set_device(CC_WACOM_MAPPING_PANEL (priv->mapper), priv->stylus);
 
 	/* FIXME move this to construct */
 	priv->wacom_settings  = gsd_wacom_device_get_settings (stylus);
