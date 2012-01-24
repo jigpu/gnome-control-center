@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2007, 2008  Red Hat, Inc.
+ * Copyright (C) 2012 Wacom.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  *
  * Author: Soren Sandmann <sandmann@redhat.com>
- *
+ *         Jason Gerecke  <killertofu@gmail.com>
  */
 
 #include <config.h>
@@ -2665,6 +2666,18 @@ cc_display_panel_constructor (GType                  gtype,
   gtk_container_add (GTK_CONTAINER (self), self->priv->panel);
 
   return obj;
+}
+
+void
+cc_display_panel_edit_outputs (CcDisplayPanel *self,
+                               gboolean        enable)
+{
+  GtkWidget *widget = WID ("hbox1");
+
+  if (enable)
+    gtk_widget_show (widget);
+  else
+    gtk_widget_hide (widget);
 }
 
 void
