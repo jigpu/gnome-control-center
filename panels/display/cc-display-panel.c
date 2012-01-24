@@ -2664,7 +2664,7 @@ cc_display_panel_constructor (GType                  gtype,
 
   gtk_widget_show (self->priv->panel);
   gtk_container_add (GTK_CONTAINER (self), self->priv->panel);
-
+  cc_display_panel_edit_outputs (self, FALSE);
   return obj;
 }
 
