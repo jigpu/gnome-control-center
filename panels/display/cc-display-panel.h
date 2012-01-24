@@ -67,6 +67,8 @@ struct _CcDisplayPanelClass
 
 GType cc_display_panel_get_type (void) G_GNUC_CONST;
 
+void  cc_display_panel_edit_layout              (CcDisplayPanel *self,
+                                                 gboolean        enable);
 void  cc_display_panel_edit_outputs             (CcDisplayPanel *self,
                                                  gboolean        enable);
 

@@ -92,6 +92,7 @@ struct _CcDisplayPanelPrivate
   GtkWidget      *area;
   gboolean        ignore_gui_changes;
   gboolean        dragging_top_bar;
+  gboolean        edit_layout;
 
   /* These are used while we are waiting for the ApplyConfiguration method to be executed over D-bus */
   GDBusProxy *proxy;
@@ -1679,7 +1680,8 @@ on_top_bar_event (FooScrollArea *area,
       if (!gnome_rr_config_get_clone (self->priv->current_configuration) && get_n_connected (self) > 1)
         {
           self->priv->dragging_top_bar = TRUE;
-          foo_scroll_area_begin_grab (area, (FooScrollAreaEventFunc) on_top_bar_event, self);
+          if (self->priv->edit_layout)
+            foo_scroll_area_begin_grab (area, (FooScrollAreaEventFunc) on_top_bar_event, self);
         }
 
       foo_scroll_area_invalidate (area);
@@ -1766,15 +1768,18 @@ on_output_event (FooScrollArea *area,
 	  int output_x, output_y;
 	  gnome_rr_output_info_get_geometry (output, &output_x, &output_y, NULL, NULL);
 
-	  foo_scroll_area_begin_grab (area, on_output_event, data);
+	  if (FALSE)
+	  {
+	    foo_scroll_area_begin_grab (area, on_output_event, data);
 
-	  info = g_new0 (GrabInfo, 1);
-	  info->grab_x = event->x;
-	  info->grab_y = event->y;
-	  info->output_x = output_x;
-	  info->output_y = output_y;
+          info = g_new0 (GrabInfo, 1);
+          info->grab_x = event->x;
+          info->grab_y = event->y;
+          info->output_x = output_x;
+          info->output_y = output_y;
 
-	  g_object_set_data (G_OBJECT (output), "grab-info", info);
+          g_object_set_data (G_OBJECT (output), "grab-info", info);
+	  }
 	}
       foo_scroll_area_invalidate (area);
     }
@@ -2666,6 +2671,13 @@ cc_display_panel_constructor (GType                  gtype,
   gtk_container_add (GTK_CONTAINER (self), self->priv->panel);
   cc_display_panel_edit_outputs (self, FALSE);
   return obj;
+}
+
+void
+cc_display_panel_edit_layout (CcDisplayPanel *self,
+                              gboolean        enable)
+{
+  self->priv->edit_layout = enable;
 }
 
 void
