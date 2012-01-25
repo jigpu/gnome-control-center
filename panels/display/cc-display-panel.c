@@ -546,8 +546,8 @@ cc_display_panel_constructor (GType                  gtype,
 
   align = WID ("align");
 
-  /* TODO: Create a foo-display-panel, save it to self->priv->foo_panel, and add it to the align container */
-  gtk_container_add (GTK_CONTAINER (align), self->priv->area);
+  self->priv->foo_panel = foo_display_panel_new ();
+  gtk_container_add (GTK_CONTAINER (align), self->priv->foo_panel);
 
   on_screen_changed (self->priv->screen, self);
 

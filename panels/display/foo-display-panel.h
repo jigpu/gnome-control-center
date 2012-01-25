@@ -67,6 +67,8 @@ struct _FooDisplayPanelClass
 
 GType foo_display_panel_get_type (void) G_GNUC_CONST;
 
+GtkWidget * cc_wacom_mapping_panel_new (void);
+
 void  foo_display_panel_edit_layout              (FooDisplayPanel *self,
                                                   gboolean        enable);
 void  foo_display_panel_edit_outputs             (FooDisplayPanel *self,

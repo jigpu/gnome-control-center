@@ -2318,6 +2318,16 @@ foo_display_panel_constructor (GType                  gtype,
   return obj;
 }
 
+GtkWidget *
+foo_display_panel_new ()
+{
+	FooDisplayPanel *panel;
+
+	panel = FOO_DISPLAY_PANEL (g_object_new (FOO_TYPE_DISPLAY_PANEL, NULL));
+
+	return GTK_WIDGET(panel);
+}
+
 void
 foo_display_panel_edit_layout (FooDisplayPanel *self,
                               gboolean        enable)
