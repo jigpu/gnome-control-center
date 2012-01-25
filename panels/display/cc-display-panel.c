@@ -197,12 +197,13 @@ compute_virtual_size_for_configuration (GnomeRRConfig *config, int *ret_width, i
 static void
 check_required_virtual_size (CcDisplayPanel *self)
 {
+  GnomeRRConfig *config;
   int req_width, req_height;
   int min_width, max_width;
   int min_height, max_height;
 
-  /* TODO: Get the configuration from the foo-display-panel */
-  compute_virtual_size_for_configuration (self->priv->current_configuration, &req_width, &req_height);
+  config = foo_display_panel_get_configuration (self->priv->foo_panel);
+  compute_virtual_size_for_configuration (config, &req_width, &req_height);
 
   gnome_rr_screen_get_ranges (self->priv->screen, &min_width, &max_width, &min_height, &max_height);
 
@@ -307,11 +308,12 @@ apply_configuration_returned_cb (GObject          *proxy,
 static gboolean
 sanitize_and_save_configuration (CcDisplayPanel *self)
 {
+  GnomeRRConfig *config;
   GError *error;
 
-  /* TODO: Get the configuration from the foo-display-panel */
-  gnome_rr_config_sanitize (self->priv->current_configuration);
-  gnome_rr_config_ensure_primary (self->priv->current_configuration);
+  config = foo_display_panel_get_configuration (self->priv->foo_panel);
+  gnome_rr_config_sanitize (config);
+  gnome_rr_config_ensure_primary (config);
 
   check_required_virtual_size (self);
 

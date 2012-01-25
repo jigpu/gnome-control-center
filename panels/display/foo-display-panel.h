@@ -72,6 +72,8 @@ void  foo_display_panel_edit_layout              (FooDisplayPanel *self,
 void  foo_display_panel_edit_outputs             (FooDisplayPanel *self,
                                                   gboolean        enable);
 
+GnomeRRConfig foo_display_panel_get_configuration (FooDisplayPanel *self);
+
 gint foo_display_panel_get_selected_monitor      (FooDisplayPanel *self);
 
 G_END_DECLS

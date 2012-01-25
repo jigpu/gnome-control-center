@@ -2333,3 +2333,9 @@ foo_display_panel_edit_outputs (FooDisplayPanel *self,
   else
     gtk_widget_hide (widget);
 }
+
+GnomeRRConfig
+foo_display_panel_get_configuration (FooDisplayPanel *self)
+{
+	return self->priv->current_configuration;
+}
