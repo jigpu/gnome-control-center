@@ -323,7 +323,7 @@ sanitize_and_save_configuration (CcDisplayPanel *self)
   ensure_current_configuration_is_saved ();
 
   error = NULL;
-  if (!gnome_rr_config_save (self->priv->current_configuration, &error))
+  if (!gnome_rr_config_save (config, &error))
     {
       error_message (self, _("Could not save the monitor configuration"), error->message);
       g_error_free (error);
