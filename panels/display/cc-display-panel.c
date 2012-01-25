@@ -453,13 +453,7 @@ dialog_toplevel_focus_changed (GtkWindow      *window,
 			       GParamSpec     *pspec,
 			       CcDisplayPanel *self)
 {
-  /* TODO: Replace this with calls that enables/disables the foo-display-panel labler */
-  if (self->priv->labeler == NULL)
-    return;
-  if (gtk_window_has_toplevel_focus (window))
-    gnome_rr_labeler_show (self->priv->labeler);
-  else
-    gnome_rr_labeler_hide (self->priv->labeler);
+  foo_display_panel_enable_labler (self->priv->foo_panel, gtk_window_has_toplevel_focus (window));
 }
 
 static void

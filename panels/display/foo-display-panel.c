@@ -91,6 +91,7 @@ struct _FooDisplayPanelPrivate
   gboolean        ignore_gui_changes;
   gboolean        dragging_top_bar;
   gboolean        edit_layout;
+  gboolean        enable_labeler;
 
   /* These are used while we are waiting for the ApplyConfiguration method to be executed over D-bus */
   GDBusProxy *proxy;
@@ -246,8 +247,8 @@ on_screen_changed (GnomeRRScreen *scr,
   }
 
   self->priv->labeler = gnome_rr_labeler_new (self->priv->current_configuration);
-  /* TODO: If our parent has focus, and showing labels is enabled, show the labels */
-  if (gtk_widget_has_focus (self->priv->panel))
+  /* TODO: If our parent has focus, show the labels */
+  if (gtk_widget_has_focus (self->priv->panel) && self->priv->enable_labeler)
      gnome_rr_labeler_show (self->priv->labeler);
 
   select_current_output_from_dialog_position (self);
@@ -2264,6 +2265,8 @@ foo_display_panel_constructor (GType                  gtype,
       return obj;
     }
 
+  self->priv->enable_labeler = TRUE;
+
   self->priv->clock_settings = g_settings_new (CLOCK_SCHEMA);
 
   self->priv->current_monitor_event_box = WID ("current_monitor_event_box");
@@ -2346,4 +2349,15 @@ foo_display_panel_set_output (FooDisplayPanel *self,
 {
 	self->priv->current_output = output;
 	rebuild_gui (self);
+}
+
+void
+foo_display_panel_enable_labler (FooDisplayPanel *self,
+                                 gboolean         enable)
+{
+	self->priv->enable_labeler = enable;
+	if (enable)
+		gnome_rr_labeler_show (self->priv->labeler);
+	else
+		gnome_rr_labeler_hide (self->priv->labeler);
 }
