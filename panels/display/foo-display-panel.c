@@ -231,6 +231,7 @@ on_screen_changed (GnomeRRScreen *scr,
 {
   GnomeRRConfig *current;
   FooDisplayPanel *self = data;
+  GtkWidget *toplevel;
 
   current = gnome_rr_config_new_current (self->priv->screen, NULL);
   gnome_rr_config_ensure_primary (current);
@@ -247,8 +248,9 @@ on_screen_changed (GnomeRRScreen *scr,
   }
 
   self->priv->labeler = gnome_rr_labeler_new (self->priv->current_configuration);
-  /* TODO: If our parent has focus, show the labels */
-  if (gtk_widget_has_focus (self->priv->panel) && self->priv->enable_labeler)
+
+  toplevel = gtk_widget_get_toplevel (self->priv->area);
+  if (gtk_widget_has_focus (toplevel) && self->priv->enable_labeler)
      gnome_rr_labeler_show (self->priv->labeler);
 
   select_current_output_from_dialog_position (self);
