@@ -2311,9 +2311,7 @@ foo_display_panel_constructor (GType                  gtype,
 
   on_screen_changed (self->priv->screen, self);
 
-  /* TODO: Show self, not the cc-display-panel... */
-  gtk_widget_show (self->priv->panel);
-  gtk_container_add (GTK_CONTAINER (self), self->priv->panel);
+  gtk_widget_show (self->priv->area);
   cc_display_panel_edit_outputs (self, FALSE);
   return obj;
 }
