@@ -466,11 +466,10 @@ static void
 on_toplevel_realized (GtkWidget     *widget,
                       CcDisplayPanel *self)
 {
-  /* TODO: Replace this with a call to foo-display-panel which sets the active output */
-  self->priv->current_output = get_output_for_window (self->priv->current_configuration,
-                                               gtk_widget_get_window (widget));
-  /* TODO: Changing the active output above should result in foo-display-panel calling rebuild_gui itself. */
-  rebuild_gui (self);
+  GnomeRROutputInfo *output;
+  output = get_output_for_window (foo_display_panel_get_configuration (self->priv->foo_panel),
+                                  gtk_widget_get_window (widget));
+  foo_display_panel_set_output (self->priv->foo_panel, output);
 }
 
 /* We select the current output, i.e. select the one being edited, based on
@@ -484,15 +483,13 @@ select_current_output_from_dialog_position (CcDisplayPanel *self)
   toplevel = gtk_widget_get_toplevel (self->priv->panel);
 
   if (gtk_widget_get_realized (toplevel)) {
-    /* TODO: Replace this with a call to foo-display-panel which sets the active output */
-    self->priv->current_output = get_output_for_window (self->priv->current_configuration,
-                                                 gtk_widget_get_window (toplevel));
-    /* TODO: Changing the active output above should result in foo-display-panel calling rebuild_gui itself. */
-    rebuild_gui (self);
+    GnomeRROutputInfo *output;
+    output = get_output_for_window (foo_display_panel_get_configuration (self->priv->foo_panel),
+                                    gtk_widget_get_window (toplevel));
+    foo_display_panel_set_output (self->priv->foo_panel, output);
   } else {
     g_signal_connect (toplevel, "realize", G_CALLBACK (on_toplevel_realized), self);
-    /* TODO: Replace this with a call to foo-display-panel which unsets the active output */
-    self->priv->current_output = NULL;
+    foo_display_panel_set_output (self->priv->foo_panel, NULL);
   }
 }
 

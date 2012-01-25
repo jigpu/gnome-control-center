@@ -2339,3 +2339,11 @@ foo_display_panel_get_configuration (FooDisplayPanel *self)
 {
 	return self->priv->current_configuration;
 }
+
+void
+foo_display_panel_set_output (FooDisplayPanel *self,
+                              GnomeRROutput   *output)
+{
+	self->priv->current_output = output;
+	rebuild_gui (self);
+}
