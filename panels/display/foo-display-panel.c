@@ -2257,6 +2257,8 @@ foo_display_panel_constructor (GType                  gtype,
       return obj;
     }
 
+  GtkWidget *panel = WID ("display-panel");
+
   self->priv->screen = gnome_rr_screen_new (gdk_screen_get_default (), &error);
   g_signal_connect (self->priv->screen, "changed", G_CALLBACK (on_screen_changed), self);
   if (!self->priv->screen)
@@ -2305,7 +2307,6 @@ foo_display_panel_constructor (GType                  gtype,
 
   /* FIXME: this should be computed dynamically */
   foo_scroll_area_set_min_size (FOO_SCROLL_AREA (self->priv->area), 0, 200);
-  gtk_widget_show (self->priv->area);
   g_signal_connect (self->priv->area, "paint",
                     G_CALLBACK (on_area_paint), self);
   g_signal_connect (self->priv->area, "viewport_changed",
@@ -2313,7 +2314,8 @@ foo_display_panel_constructor (GType                  gtype,
 
   on_screen_changed (self->priv->screen, self);
 
-  gtk_widget_show (self->priv->area);
+  gtk_container_add (GTK_CONTAINER (self), panel);
+  gtk_widget_show_all (GTK_WIDGET(self));
   return obj;
 }
 
