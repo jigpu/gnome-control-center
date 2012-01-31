@@ -38,7 +38,7 @@
 #include <glib/gi18n.h>
 #include <gdesktop-enums.h>
 
-G_DEFINE_DYNAMIC_TYPE (FooDisplayPanel, foo_display_panel, GTK_TYPE_BOX)
+G_DEFINE_TYPE (FooDisplayPanel, foo_display_panel, GTK_TYPE_BOX)
 
 #define FOO_DISPLAY_PANEL_PRIVATE(o) \
   (G_TYPE_INSTANCE_GET_PRIVATE ((o), FOO_TYPE_DISPLAY_PANEL, FooDisplayPanelPrivate))
@@ -2317,14 +2317,10 @@ foo_display_panel_constructor (GType                  gtype,
   return obj;
 }
 
-GtkWidget *
+FooDisplayPanel *
 foo_display_panel_new ()
 {
-	FooDisplayPanel *panel;
-
-	panel = FOO_DISPLAY_PANEL (g_object_new (FOO_TYPE_DISPLAY_PANEL, NULL));
-
-	return GTK_WIDGET(panel);
+	return g_object_new (FOO_TYPE_DISPLAY_PANEL, NULL);
 }
 
 void

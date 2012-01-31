@@ -70,7 +70,7 @@ struct _FooDisplayPanelClass
 
 GType foo_display_panel_get_type (void) G_GNUC_CONST;
 
-GtkWidget * foo_display_panel_new (void);
+FooDisplayPanel * foo_display_panel_new (void);
 
 void  foo_display_panel_edit_layout              (FooDisplayPanel *self,
                                                   gboolean        enable);
