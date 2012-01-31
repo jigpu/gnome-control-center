@@ -253,7 +253,7 @@ on_screen_changed (GnomeRRScreen *scr,
   if (gtk_widget_has_focus (toplevel) && self->priv->enable_labeler)
      gnome_rr_labeler_show (self->priv->labeler);
 
-  select_current_output_from_dialog_position (self);
+  /*select_current_output_from_dialog_position (self);*/
 }
 
 static void
@@ -2314,7 +2314,6 @@ foo_display_panel_constructor (GType                  gtype,
   on_screen_changed (self->priv->screen, self);
 
   gtk_widget_show (self->priv->area);
-  cc_display_panel_edit_outputs (self, FALSE);
   return obj;
 }
 
@@ -2347,15 +2346,15 @@ foo_display_panel_edit_outputs (FooDisplayPanel *self,
     gtk_widget_hide (widget);
 }
 
-GnomeRRConfig
+GnomeRRConfig*
 foo_display_panel_get_configuration (FooDisplayPanel *self)
 {
 	return self->priv->current_configuration;
 }
 
 void
-foo_display_panel_set_output (FooDisplayPanel *self,
-                              GnomeRROutput   *output)
+foo_display_panel_set_output (FooDisplayPanel   *self,
+                              GnomeRROutputInfo *output)
 {
 	self->priv->current_output = output;
 	rebuild_gui (self);

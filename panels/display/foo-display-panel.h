@@ -24,6 +24,9 @@
 #define _FOO_DISPLAY_PANEL_H
 
 #include <gtk/gtk.h>
+#define GNOME_DESKTOP_USE_UNSTABLE_API
+#include <libgnome-desktop/gnome-rr.h>
+#include <libgnome-desktop/gnome-rr-config.h>
 
 G_BEGIN_DECLS
 
@@ -67,17 +70,20 @@ struct _FooDisplayPanelClass
 
 GType foo_display_panel_get_type (void) G_GNUC_CONST;
 
-GtkWidget * cc_wacom_mapping_panel_new (void);
+GtkWidget * foo_display_panel_new (void);
 
 void  foo_display_panel_edit_layout              (FooDisplayPanel *self,
                                                   gboolean        enable);
 void  foo_display_panel_edit_outputs             (FooDisplayPanel *self,
                                                   gboolean        enable);
 
-GnomeRRConfig foo_display_panel_get_configuration (FooDisplayPanel *self);
+GnomeRRConfig* foo_display_panel_get_configuration (FooDisplayPanel *self);
 
-void foo_display_panel_set_output (FooDisplayPanel *self,
-                                   GnomeRROutput   *output);
+void foo_display_panel_set_output (FooDisplayPanel   *self,
+                                   GnomeRROutputInfo *output);
+
+void foo_display_panel_enable_labler (FooDisplayPanel *self,
+                                      gboolean         enable);
 
 gint foo_display_panel_get_selected_monitor      (FooDisplayPanel *self);
 

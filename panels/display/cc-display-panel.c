@@ -28,7 +28,7 @@
 #include "cc-display-panel.h"
 
 #include <gtk/gtk.h>
-#include "scrollarea.h"
+#include "foo-display-panel.h"
 #define GNOME_DESKTOP_USE_UNSTABLE_API
 #include <libgnome-desktop/gnome-rr.h>
 #include <libgnome-desktop/gnome-rr-config.h>
@@ -202,7 +202,7 @@ check_required_virtual_size (CcDisplayPanel *self)
   int min_width, max_width;
   int min_height, max_height;
 
-  config = foo_display_panel_get_configuration (self->priv->foo_panel);
+  config = foo_display_panel_get_configuration (FOO_DISPLAY_PANEL(self->priv->foo_panel));
   compute_virtual_size_for_configuration (config, &req_width, &req_height);
 
   gnome_rr_screen_get_ranges (self->priv->screen, &min_width, &max_width, &min_height, &max_height);
@@ -311,14 +311,14 @@ sanitize_and_save_configuration (CcDisplayPanel *self)
   GnomeRRConfig *config;
   GError *error;
 
-  config = foo_display_panel_get_configuration (self->priv->foo_panel);
+  config = foo_display_panel_get_configuration (FOO_DISPLAY_PANEL(self->priv->foo_panel));
   gnome_rr_config_sanitize (config);
   gnome_rr_config_ensure_primary (config);
 
   check_required_virtual_size (self);
 
   /* TODO: Invalidate the foo_panel */
-  foo_scroll_area_invalidate (FOO_SCROLL_AREA (self->priv->area));
+  /*foo_scroll_area_invalidate (FOO_SCROLL_AREA (self->priv->area));*/
 
   ensure_current_configuration_is_saved ();
 
@@ -453,7 +453,7 @@ dialog_toplevel_focus_changed (GtkWindow      *window,
 			       GParamSpec     *pspec,
 			       CcDisplayPanel *self)
 {
-  foo_display_panel_enable_labler (self->priv->foo_panel, gtk_window_has_toplevel_focus (window));
+  foo_display_panel_enable_labler (FOO_DISPLAY_PANEL(self->priv->foo_panel), gtk_window_has_toplevel_focus (window));
 }
 
 static void
@@ -463,7 +463,7 @@ on_toplevel_realized (GtkWidget     *widget,
   GnomeRROutputInfo *output;
   output = get_output_for_window (foo_display_panel_get_configuration (self->priv->foo_panel),
                                   gtk_widget_get_window (widget));
-  foo_display_panel_set_output (self->priv->foo_panel, output);
+  foo_display_panel_set_output (FOO_DISPLAY_PANEL(self->priv->foo_panel), output);
 }
 
 /* We select the current output, i.e. select the one being edited, based on
@@ -480,10 +480,10 @@ select_current_output_from_dialog_position (CcDisplayPanel *self)
     GnomeRROutputInfo *output;
     output = get_output_for_window (foo_display_panel_get_configuration (self->priv->foo_panel),
                                     gtk_widget_get_window (toplevel));
-    foo_display_panel_set_output (self->priv->foo_panel, output);
+    foo_display_panel_set_output (FOO_DISPLAY_PANEL(self->priv->foo_panel), output);
   } else {
     g_signal_connect (toplevel, "realize", G_CALLBACK (on_toplevel_realized), self);
-    foo_display_panel_set_output (self->priv->foo_panel, NULL);
+    foo_display_panel_set_output (FOO_DISPLAY_PANEL(self->priv->foo_panel), NULL);
   }
 }
 
@@ -538,7 +538,7 @@ cc_display_panel_constructor (GType                  gtype,
   toplevel = cc_shell_get_toplevel (shell);
   self->priv->focus_id = g_signal_connect (toplevel, "notify::has-toplevel-focus",
                                            G_CALLBACK (dialog_toplevel_focus_changed), self);
-  on_screen_changed (self->priv->screen, self);
+  /*on_screen_changed (self->priv->screen, self);*/
 
   self->priv->panel = WID ("display-panel");
   g_signal_connect_after (self->priv->panel, "show",
@@ -549,14 +549,13 @@ cc_display_panel_constructor (GType                  gtype,
   self->priv->foo_panel = foo_display_panel_new ();
   gtk_container_add (GTK_CONTAINER (align), self->priv->foo_panel);
 
-  on_screen_changed (self->priv->screen, self);
+  /*on_screen_changed (self->priv->screen, self);*/
 
   g_signal_connect_swapped (WID ("apply_button"),
                             "clicked", G_CALLBACK (apply), self);
 
   gtk_widget_show (self->priv->panel);
   gtk_container_add (GTK_CONTAINER (self), self->priv->panel);
-  cc_display_panel_edit_outputs (self, FALSE);
   return obj;
 }
 
