@@ -2314,6 +2314,7 @@ foo_display_panel_constructor (GType                  gtype,
 
   on_screen_changed (self->priv->screen, self);
 
+  gtk_container_add (GTK_CONTAINER (WID ("align")), self->priv->area);
   gtk_container_add (GTK_CONTAINER (self), panel);
   gtk_widget_show_all (GTK_WIDGET(self));
   return obj;
