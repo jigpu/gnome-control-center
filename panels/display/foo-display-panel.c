@@ -2302,6 +2302,7 @@ foo_display_panel_constructor (GType                  gtype,
 
   /* Scroll Area */
   self->priv->area = (GtkWidget *)foo_scroll_area_new ();
+  g_object_set_data (G_OBJECT(self->priv->area), "panel", self);
 
   set_monitors_tooltip (self, FALSE);
 
