@@ -1751,8 +1751,9 @@ on_output_event (FooScrollArea *area,
     {
       GrabInfo *info;
 
+	g_warning("Original was right type: %d; is at %x", GNOME_IS_RR_OUTPUT_INFO(self->priv->current_output), self->priv->current_output);
       self->priv->current_output = output;
-
+      g_warning("New is right type: %d; is at %x", GNOME_IS_RR_OUTPUT_INFO(self->priv->current_output), self->priv->current_output);
       rebuild_gui (self);
       set_monitors_tooltip (self, TRUE);
 
@@ -2035,6 +2036,8 @@ paint_output (FooDisplayPanel *self, cairo_t *cr, int i)
 
   cairo_set_source_rgba (cr, r, g, b, 1.0);
 
+  g_warning("Output being set has right type: %d; is at %x", GNOME_IS_RR_OUTPUT_INFO(output), output);
+  g_warning("Setting on area %d", self->priv->area);
   foo_scroll_area_add_input_from_fill (FOO_SCROLL_AREA (self->priv->area),
                                        cr, on_output_event, output);
   cairo_fill (cr);

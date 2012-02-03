@@ -797,6 +797,8 @@ process_event (FooScrollArea           *scroll_area,
   GtkWidget *widget = GTK_WIDGET (scroll_area);
   int i;
 
+  g_warning("Processing event for scroll area %d", scroll_area);
+
   allocation_to_canvas (scroll_area, &x, &y);
 
   if (scroll_area->priv->grabbed)
